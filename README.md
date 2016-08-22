@@ -53,39 +53,30 @@ Thời gian thi đấu:
 Những chiến binh trong VNG11+1 Bot Battle Tournament được cấu tạo như thế nào?
 
 Về phần cứng, cấu tạo của bot bao gồm:
-Zalo_ScreenShot_16_8_2016_1355832
 
 2 Bánh xe chủ động; Công tắc nguồn; Jack sạc pin 2 cell
-Zalo_ScreenShot_16_8_2016_144996
 
 3 Cảm biến quang nằm dưới đáy bot, chủ yếu để dò 2 màu trắng/đen; 1 Bánh xe bị động
-Zalo_ScreenShot_16_8_2016_146371
 
 Cảm biến phía trước đầu xe, đo được khoảng cách tương đối, để dò tìm đối thủ.
-Zalo_ScreenShot_16_8_2016_143797
 
 Bo mạch; Mạch nạp
 
-Lưu ý: Khi cắm Pin lipo vào sẽ có 2 đèn chuyển sang màu đỏ, đó là 2 cell đang được sạc và khi chuyển sang màu xanh là Pin đã được sạc đầy. Các đội lưu ý nên sạc pin thường xuyên vì nếu điện áp 2 cell xuống dưới 6.6V sẽ rất dễ hư pin.Zalo_ScreenShot_16_8_2016_149890Về phần mềm của bot, sẽ do chính các đội chơi lập trình online.
+Lưu ý: Khi cắm Pin lipo vào sẽ có 2 đèn chuyển sang màu đỏ, đó là 2 cell đang được sạc và khi chuyển sang màu xanh là Pin đã được sạc đầy. Các đội lưu ý nên sạc pin thường xuyên vì nếu điện áp 2 cell xuống dưới 6.6V sẽ rất dễ hư pin.Về phần mềm của bot, sẽ do chính các đội chơi lập trình online.
 
 Bước 1: Truy cập vào trang https://developer.mbed.org/account/signup/?next=%2F và tạo 1 tài khoản
 
-Zalo_ScreenShot_16_8_2016_131441
 
 Bước 2: Nhấp vào tab complier vào trình soạn thảo và build code.
 
-Zalo_ScreenShot_16_8_2016_1314769
 
 Bước 3: Nhấp vào New chọn flatform là Nordic nrf51822 (nếu lần đầu chưa có, bạn có thể add vào theo hướng dẫn của ứng dụng. Tiếp theo chọn 1 template, ở đây có thể chọn BLE Beacon demo rồi đặt tên cho project.
 
-Zalo_ScreenShot_16_8_2016_1315809
 
 Bước 4: Mở file main.cpp của project và pass nội dung file main của bot vào, sau đó click vào ô compiler và đợi mbed build xong nó sẽ tự download file hex về máy tính.
 
-Zalo_ScreenShot_16_8_2016_1315936
 
 Bước 5: Tắt nguồn Sumo bot và gắn mạch nạp vào bo Vbluno rồi kết nối với máy tính, nếu kết nối thành công sẽ hiện lên 1 ổ đĩa có tên là MBED. Copy file hex đã build từ trước và pass vào ở đĩa MBED, nếu nhìn thấy led trên mạch nạp chớp tắt là đang trong quá trình nap, sau đó led ngừng tắt là quá trình nạp đã thành công, sau đó tháo mạch nạp và test sumo bot.
 
-Zalo_ScreenShot_16_8_2016_1315968
 
 Lưu ý: trong quá trình kết nối mạch nạp với máy tính nếu không hiện lên ổ đĩa ta nên kiểm tra lại kết nối bằng cách tháo ra và cắm lại.
