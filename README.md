@@ -1,4 +1,5 @@
 # VNG_bot_battle
+Hướng dẫn sài Arduino IDE để lập trình cho VNG IoT Bot ở đây: https://github.com/VNGIoTLab/Arduino_VBLUno_nRF51822
 
 VNG 11+1 Bot Battle Tournament là cuộc thi điều khiển và lập trình robot với hình thức thi đấu đối kháng, nhằm nâng cao tư duy lập trình robot tự động của Clickers.
 
