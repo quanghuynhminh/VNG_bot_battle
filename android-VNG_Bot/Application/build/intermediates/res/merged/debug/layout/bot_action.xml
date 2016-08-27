@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go Forward"
+        android:id="@+id/button_forward"
+        android:onClick="onClickForward"
+        android:layout_marginTop="10dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go Back"
+        android:id="@+id/button_back"
+        android:onClick="onClickBack" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rotate Left"
+        android:id="@+id/button_left"
+        android:onClick="onClickLeft" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rotate Right"
+        android:id="@+id/button_right"
+        android:onClick="onClickRight" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:id="@+id/button_stop"
+        android:onClick="onClickStop" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Speed"
+        android:id="@+id/lable_speed"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/edittext_speed"
+        android:text="0"
+        android:numeric="integer|decimal"
+        android:enabled="true"
+        android:editable="true"
+        android:autoText="true"
+        android:foregroundGravity="center_vertical|center|center_horizontal"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="5dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start read sensors"
+        android:id="@+id/button_sensor"
+        android:onClick="onClickSensor"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:layout_width="362dp"
+        android:layout_height="123dp"
+        android:text="data"
+        android:id="@+id/label_sensor"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp"
+        android:textStyle="italic"
+        android:editable="true"
+        android:enabled="true" />
+
+</LinearLayout>

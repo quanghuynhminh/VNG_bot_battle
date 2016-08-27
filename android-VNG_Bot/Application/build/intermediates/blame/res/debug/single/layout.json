@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "E:\\IoT\\IoT_VNG\\VBLUno_Robocar\\_Bot_Battle_Chinhthuc\\android-VNG_Bot\\Application\\build\\intermediates\\res\\merged\\debug\\layout\\bot_action.xml",
+        "source": "E:\\IoT\\IoT_VNG\\VBLUno_Robocar\\_Bot_Battle_Chinhthuc\\android-VNG_Bot\\Application\\src\\main\\res\\layout\\bot_action.xml"
+    },
+    {
+        "merged": "E:\\IoT\\IoT_VNG\\VBLUno_Robocar\\_Bot_Battle_Chinhthuc\\android-VNG_Bot\\Application\\build\\intermediates\\res\\merged\\debug\\layout\\gatt_services_characteristics.xml",
+        "source": "E:\\IoT\\IoT_VNG\\VBLUno_Robocar\\_Bot_Battle_Chinhthuc\\android-VNG_Bot\\Application\\src\\main\\res\\layout\\gatt_services_characteristics.xml"
+    },
+    {
+        "merged": "E:\\IoT\\IoT_VNG\\VBLUno_Robocar\\_Bot_Battle_Chinhthuc\\android-VNG_Bot\\Application\\build\\intermediates\\res\\merged\\debug\\layout\\listitem_device.xml",
+        "source": "E:\\IoT\\IoT_VNG\\VBLUno_Robocar\\_Bot_Battle_Chinhthuc\\android-VNG_Bot\\Application\\src\\main\\res\\layout\\listitem_device.xml"
+    },
+    {
+        "merged": "E:\\IoT\\IoT_VNG\\VBLUno_Robocar\\_Bot_Battle_Chinhthuc\\android-VNG_Bot\\Application\\build\\intermediates\\res\\merged\\debug\\layout\\actionbar_indeterminate_progress.xml",
+        "source": "E:\\IoT\\IoT_VNG\\VBLUno_Robocar\\_Bot_Battle_Chinhthuc\\android-VNG_Bot\\Application\\src\\main\\res\\layout\\actionbar_indeterminate_progress.xml"
+    }
+]
