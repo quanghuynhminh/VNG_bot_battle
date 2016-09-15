@@ -38,16 +38,12 @@
 /*
  *  @brief  Các kết nối phần cứng và tham số cơ bản cho điều khiển 2 động cơ bánh
  */
- /*
+ 
 #define MOTOR_LEFT_PWM          D11       //SHIELD L298/MOTOR B   P24
 #define MOTOR_LEFT_DIRECTION    D13                             //P28
-#define MOTOR_RIGHT_PWM         D10       //SHIELD L298/MOTOR A   P23
+#define MOTOR_RIGHT_PWM         D10        //SHIELD L298/MOTOR A   P23
 #define MOTOR_RIGHT_DIRECTION   D12                             //P25
-*/
-#define MOTOR_LEFT_PWM          D5       //SHIELD L298/MOTOR B   P24
-#define MOTOR_LEFT_DIRECTION    D7                            //P28
-#define MOTOR_RIGHT_PWM         D4       //SHIELD L298/MOTOR A   P23
-#define MOTOR_RIGHT_DIRECTION   D6                              //P25
+
 
 #define PWM_RESOLUTION_BIT      8
 #define PWM_VALUE_MAX           255
@@ -57,17 +53,17 @@
 /*
  *  @brief  Các kết nối phần cứng và tham số cơ bản cho các sensors
  */
-#define SENSOR_LINE_RIGHT       A1          //Cam bien do vach Phai - DIGITAL
-#define SENSOR_LINE_LEFT        A2          //Cam bien do vach Trai - DIGITAL
-#define SENSOR_LINE_BEHIND      A3          //Cam bien do vach Phia sau - DIGITAL
+#define SENSOR_LINE_RIGHT       A2          //Cam bien do vach Phai - DIGITAL
+#define SENSOR_LINE_LEFT        A3          //Cam bien do vach Trai - DIGITAL
+#define SENSOR_LINE_BEHIND      A4          //Cam bien do vach Phia sau - DIGITAL
 #define LINE_BLACK_VALUE       HIGH
 #define LINE_WHITE_VALUE       LOW
 #define LINE_BLACK             HIGH         //Co vach
 #define OFF                    LOW          //Khong co vach
-#define CONSTANT_NOISE1        100          //So lan dem de chong nhieu cho Cam bien do line
-#define CONSTANT_NOISE2        70           //Nguong chap nhan 
+#define CONSTANT_NOISE1        5 //100          //So lan dem de chong nhieu cho Cam bien do line
+#define CONSTANT_NOISE2        3 //70           //Nguong chap nhan 
 
-#define SENSOR_DISTANCE        A0           //ANALOG,  Do phan giai 10bit: 0-1023
+#define SENSOR_DISTANCE        A5           //ANALOG,  Do phan giai 10bit: 0-1023
 #define ANALOG_VALUE_MAX       1023         //ADC 10 bit
 #define VREF                   3300         //mV
 
@@ -79,7 +75,6 @@
 #define BACK                  2
 #define LEFT                  3
 #define RIGHT                 4
-uchar pr_state, nx_state=STOP;              //Nhớ 2 trạng thái 
 
 /*
  *  @brief  Một số mức tốc độ được định nghĩa sẵn
@@ -131,8 +126,6 @@ uint8_t sensor_distance_char_value[TXRX_BUF_LEN]  = {0};
 uint8_t sensor_left_char_value[TXRX_BUF_LEN]      = {0};
 uint8_t sensor_right_char_value[TXRX_BUF_LEN]     = {0};
 uint8_t sensor_behind_char_value[TXRX_BUF_LEN]    = {0};
-
-static uint8_t val_sensor[2]         = {0x00, 0x00};
                         
 // Create characteristic
 GattCharacteristic  motor_stop_characteristic(motor_service_stop_char_uuid, motor_stop_char_value, 1, TXRX_BUF_LEN, GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_WRITE | GattCharacteristic::BLE_GATT_CHAR_PROPERTIES_WRITE_WITHOUT_RESPONSE );
@@ -182,9 +175,6 @@ void control_motor(uchar left_pwm, uchar left_direction, uchar right_pwm, uchar 
 void stop_car(){
   analogWrite(MOTOR_LEFT_PWM, 0);
   analogWrite(MOTOR_RIGHT_PWM, 0);
-  
-  pr_state = nx_state;
-  nx_state = STOP;
 }
 
 /*
@@ -194,11 +184,7 @@ void stop_car(){
  *              Tốc độ quay: 0-255
  */
 void rotate_left(uchar v){
-  if(check_line_left()==OFF){
     control_motor(v, DIR_BACK, v, DIR_FORWARD);  
-    pr_state = nx_state;
-    nx_state = LEFT;
-  }
 }
 
 /*
@@ -208,11 +194,7 @@ void rotate_left(uchar v){
  *              Tốc độ quay: 0-255
  */
 void rotate_right(uchar v){
-  if(check_line_right()==OFF){
     control_motor(v, DIR_FORWARD, v, DIR_BACK);  
-    pr_state = nx_state;
-    nx_state = RIGHT;
-  }
 }
 
 /*
@@ -222,11 +204,7 @@ void rotate_right(uchar v){
  *              Tốc độ quay: 0-255
  */
 void go_forward(uchar v){
-  if(has_line_front()==OFF){
     control_motor(v, DIR_FORWARD, v, DIR_FORWARD);  
-    pr_state = nx_state;
-    nx_state = FORWARD;
-  }
 }
 
 /*
@@ -236,11 +214,7 @@ void go_forward(uchar v){
  *              Tốc độ quay: 0-255
  */
 void go_back(uchar v){
-  if(check_line_behind()==OFF){
     control_motor(v, DIR_BACK, v, DIR_BACK);  
-    pr_state = nx_state;
-    nx_state = BACK;
-  }
 }
 
 /***********************************************************************************
@@ -366,10 +340,10 @@ int value_to_cm(int adc){
  *              Thường dùng khoảng cách 30cm, 40cm
  */
 int measure_distance(){
-  int val[10], average=0;
+  int val_tmp, average=0;
   for(int i=0; i<5; i++){
-    val[i] = analogRead(SENSOR_DISTANCE);
-    average = average + val[i];
+    val_tmp = analogRead(SENSOR_DISTANCE);
+    average = average + val_tmp;
     delay(1);
   }
   average = average/5;
@@ -518,10 +492,6 @@ void connection_callback( const Gap::ConnectionCallbackParams_t *params ) {
  *                        Handler->data : Pointer to the data to write
  */
 void gattserver_write_callback(const GattWriteCallbackParams *Handler) {
-  #ifdef DEBUG_SERIAL
-    debug("Central writes values to device.");
-  #endif
-
   static uint8_t buf_motor[TXRX_BUF_LEN];
   static uint16_t bytes_read=0;
 
@@ -578,13 +548,16 @@ void gattserver_write_callback(const GattWriteCallbackParams *Handler) {
  *                  0 (OFF):        Không có vạch
  */
 void send_sensor_left_to_smartphone(){
-  val_sensor[1] = check_line_left();
-  ble.updateCharacteristicValue(sensor_left_characteristic.getValueAttribute().getHandle(), val_sensor, sizeof(val_sensor));
-   
+  static uint8_t val_for= 0, val_cur = 0;
+  val_cur= check_line_left();
+  if(val_cur != val_for){
+    ble.updateCharacteristicValue(sensor_left_characteristic.getValueAttribute().getHandle(), &val_cur, 1);
+    val_for = val_cur;
   #ifdef DEBUG_SERIAL
-    debug("Send sensor left to smart phone");
-    debug(val_sensor[1]);
+    debug("Left line");
+    debug(val_cur);
   #endif
+  }
 }
 
 /*
@@ -595,13 +568,16 @@ void send_sensor_left_to_smartphone(){
  *                  0 (OFF):        Không có vạch
  */
 void send_sensor_right_to_smartphone(){
-  val_sensor[1] = check_line_right();
-  ble.updateCharacteristicValue(sensor_right_characteristic.getValueAttribute().getHandle(), val_sensor, sizeof(val_sensor));
-   
+  static uint8_t val_for= 0, val_cur = 0;
+  val_cur= check_line_right();
+  if(val_cur != val_for){
+    ble.updateCharacteristicValue(sensor_right_characteristic.getValueAttribute().getHandle(), &val_cur, 1);
+    val_for = val_cur;
   #ifdef DEBUG_SERIAL
-    debug("Send sensor right to smart phone");
-    debug(val_sensor[1]);
+    debug("Right line");
+    debug(val_cur);
   #endif
+  }
 }
 
 /*
@@ -612,13 +588,16 @@ void send_sensor_right_to_smartphone(){
  *                  0 (OFF):        Không có vạch
  */
 void send_sensor_behind_to_smartphone(){
-  val_sensor[1] = check_line_behind();
-  ble.updateCharacteristicValue(sensor_behind_characteristic.getValueAttribute().getHandle(), val_sensor, sizeof(val_sensor));
-  
+  static uint8_t val_for= 0, val_cur = 0;
+  val_cur= check_line_behind();
+  if(val_cur != val_for){
+    ble.updateCharacteristicValue(sensor_behind_characteristic.getValueAttribute().getHandle(), &val_cur, 1);
+    val_for = val_cur;
   #ifdef DEBUG_SERIAL
-    debug("Send sensor behind to smart phone");
-    debug(val_sensor[1]);
+    debug("Behind line");
+    debug(val_cur);
   #endif
+  }
 }
 
 /*
@@ -628,14 +607,16 @@ void send_sensor_behind_to_smartphone(){
  * 
  */
 void send_sensor_distance_to_smartphone(){
-  
-  val_sensor[1] = measure_distance();
-  ble.updateCharacteristicValue(sensor_distance_characteristic.getValueAttribute().getHandle(), val_sensor, sizeof(val_sensor));
-   
+  static uint8_t val_for= 0, val_cur = 0;
+  val_cur= measure_distance();
+  if((val_cur > val_for+1)||(val_cur < val_for - 1)){
+    ble.updateCharacteristicValue(sensor_distance_characteristic.getValueAttribute().getHandle(), &val_cur, 1);
+    val_for = val_cur;
   #ifdef DEBUG_SERIAL
-    debug("Send sensor distance to smart phone");
-    debug(val_sensor[1]);
+    debug("Distance");
+    debug(val_cur);
   #endif
+  }
 }
 
 /**
@@ -644,15 +625,13 @@ void send_sensor_distance_to_smartphone(){
  * @note    Đây chỉ là hàm demo việc gửi dữ liệu cảm biến lên smartphone
  */
 void task_handle(void) {
-  #ifdef DEBUG_SERIAL
-    debug("----------------Send sensors to smartphone-------------- ");
     // if false or ignore, notification or indication is generated if permit.
     send_sensor_left_to_smartphone();
     send_sensor_right_to_smartphone();
     send_sensor_behind_to_smartphone();
     send_sensor_distance_to_smartphone();
-    
-  #endif
+    delay(1);
+
 }
 
 /**
@@ -676,7 +655,7 @@ void set_advertisement(void) {
  */
  void setup_ble(){
   // Init timer task
-  ticker1s.attach(task_handle, 1);        //test các cảm biến theo chu kỳ 1s
+  //ticker1s.attach(task_handle, 1);        //test các cảm biến theo chu kỳ 1s
   // Init ble
   ble.init();
   ble.onConnection(connection_callback);
@@ -748,7 +727,7 @@ void setup() {
   pinMode(MOTOR_RIGHT_DIRECTION, OUTPUT);
   analogWriteResolution(PWM_RESOLUTION_BIT);
   stop_car();
-
+  
   //init sensor
   pinMode(SENSOR_LINE_LEFT, INPUT_PULLUP);
   pinMode(SENSOR_LINE_RIGHT, INPUT_PULLUP);
@@ -758,9 +737,11 @@ void setup() {
   //init BLE
   setup_ble();
   
+  ticker1s.attach(task_handle, 0.05);        //test các cảm biến theo chu kỳ 0.05s
+
   //init test
   #ifdef DEBUG_SERIAL
-    Serial.begin(9600); 
+    Serial.begin(115200); 
     Serial.println("Start test application");
   #endif
 }
@@ -771,14 +752,13 @@ void setup() {
 void loop() {
   //Test
   #ifdef DEBUG_SERIAL
-    /*while(1){
-      test();
-    };*/
-  #endif
-
+   //   test();
+  
+  #else
   //Chiến đấu
-  alg1();
+//  alg1();
   
   //for BLE
   ble.waitForEvent();
+  #endif
 }
